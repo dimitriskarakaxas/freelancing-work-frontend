@@ -1,0 +1,86 @@
+/** @format */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .control {
+    @apply flex items-center  justify-between mb-8;
+  }
+
+  .input-control {
+    @apply border border-gray-400 p-4 py-2 rounded-md;
+  }
+
+  .input-control-invalid {
+    @apply bg-[#ffc2c2] border-2 border-red-500;
+  }
+
+  .input {
+    @apply focus:outline-none focus:border-0;
+  }
+}
+
+.invalid-feedback,
+.error {
+  color: red;
+  text-align: right;
+  max-width: 260px;
+  margin: auto;
+}
+
+.is-invalid,
+.custom-input {
+  display: inline-flex;
+  font-size: 1rem;
+  height: 40px;
+  justify-content: flex-start;
+  line-height: normal;
+  padding: 1rem;
+  align-items: center;
+  width: 100%;
+
+  border: 1px solid gray;
+  transition: 0.4s;
+  outline: none;
+  border-radius: 5px;
+}
+
+.custom-input:focus,
+.custom-input:active {
+  outline: 0 !important;
+  border-color: #0a66c2;
+  box-shadow: 0 0 3px 2px rgb(14 118 168/ 50%);
+}
+
+.is-invalid,
+.touched.invalid {
+  border-color: red;
+  background: #ffc2c2;
+  box-shadow: none;
+}
+
+/* Mine */
+.left-side {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(228, 228, 228);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #e66465, #9198e5);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
