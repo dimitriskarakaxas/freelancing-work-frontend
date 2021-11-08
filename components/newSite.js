@@ -1,31 +1,17 @@
-/** @format */
-
 import Head from "next/head";
-import router from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
-export default function Form({ fetchedInput, setRefetch, refetch }) {
-  const [inputID, setInputID] = useState("");
-  const [inputOwner, setInputOwner] = useState("");
-  const [inputLongitude, setInputLongitude] = useState("");
-  const [inputLatitude, setInputLatitude] = useState("");
-  const [inputUTC, setInputUTC] = useState("");
+export default function NewSite() {
+  const [checkboxesState, setCheckboxesState] = React.useState([
+    false,
+    true,
+    false,
+  ]);
+  const router = useRouter();
 
-  const [checkboxesState, setCheckboxesState] = useState([false, true, false]);
-
-  React.useEffect(() => {
-    setInputID(fetchedInput.siteId);
-    setInputOwner(fetchedInput.owner);
-    setInputLongitude(fetchedInput.longitude);
-    setInputLatitude(fetchedInput.latitude);
-    setInputUTC(fetchedInput.utc);
-    setCheckboxesState([
-      fetchedInput.internal,
-      fetchedInput.dst,
-      fetchedInput.disabled,
-    ]);
-  }, [fetchedInput]);
+  React.useEffect(() => {}, [checkboxesState]);
 
   const checkboxClickHandler = (event) => {
     if (
@@ -46,37 +32,43 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
     }
   };
 
-  //   const {
-  //     register,
-  //     handleSubmit,
-  //     formState: { errors },
-  //   } = useForm();
-  //   const onSubmit = (data) => console.log(data);
-  const handleSubmit = (event) => {
+  const cancelBtnHandler = (event) => {
     event.preventDefault();
+    router.push("/");
+  };
 
-    const data = {
-      owner: inputOwner,
-      longitude: inputLongitude,
-      latitude: inputLatitude,
-      utc: inputUTC,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    const siteData = {
+      name: data.name,
+      owner: data.owner,
+      longitude: data.longitude,
+      latitude: data.latitude,
+      utc: data.utc,
       internal: checkboxesState[0],
       dst: checkboxesState[1],
       disabled: checkboxesState[2],
     };
 
-    fetch(`http://localhost:8080/sites/${inputID}`, {
-      method: "PUT",
+    console.log(siteData);
+    return;
+
+    fetch("http://localhost:8080/sites", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(siteData),
     })
       .then((response) => {
-        if (response.status !== 200) {
-          throw new Error("Update Site failed!");
+        if (response.status !== 201) {
+          throw new Error("Create Site failed");
         }
-        setRefetch(!refetch);
+        router.push("/");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -85,20 +77,18 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
 
   return (
     <div className="flex-1">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-center  justify-between mb-8  space-x-8 ">
-          <label htmlFor="sideId"> SideID</label>
+          <label htmlFor="sideId">Site name</label>
 
           <div className="w-[250px] ">
+            {errors.name && <p className="error">Site name is required</p>}
             <input
-              className="custom-input"
-              type="number"
-              id="sideId"
-              value={inputID}
-              onChange={(event) => {
-                setInputID(event.target.value);
-              }}
-              required
+              className={` ${errors.name ? "is-invalid" : "custom-input"}`}
+              type="text"
+              id="name"
+              placeholder={errors.name ? "" : "Placeholder from db"}
+              {...register("name", { required: true })}
             />
           </div>
         </div>
@@ -106,14 +96,13 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
           <label htmlFor="owner">Owner</label>
 
           <div className="w-[250px] ">
+            {errors.owner && <p className="error">Owner is required</p>}
             <input
-              className="custom-input"
+              className={` ${errors.owner ? "is-invalid" : "custom-input"}`}
               type="text"
               id="owner"
-              value={inputOwner}
-              onChange={(event) => {
-                setInputOwner(event.target.value);
-              }}
+              placeholder={errors.owner ? "" : "Placeholder from db"}
+              {...register("owner", { required: true })}
             />
           </div>
         </div>
@@ -121,15 +110,15 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
           <label htmlFor="longitude">Longitude</label>
 
           <div className="w-[250px] ">
+            {errors.longitude && (
+              <p className="error">Longitude is required (number)</p>
+            )}
             <input
-              className="custom-input"
+              className={` ${errors.longitude ? "is-invalid" : "custom-input"}`}
               type="number"
               id="longitude"
-              value={inputLongitude}
-              onChange={(event) => {
-                setInputLongitude(event.target.value);
-              }}
-              required
+              placeholder={errors.longitude ? "" : "Placeholder from db"}
+              {...register("longitude", { required: true })}
             />
           </div>
         </div>
@@ -137,15 +126,15 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
           <label htmlFor="latitude">Latitude</label>
 
           <div className="w-[250px] ">
+            {errors.latitude && (
+              <p className="error">Latitude is required (number)</p>
+            )}
             <input
-              className="custom-input"
+              className={` ${errors.latitude ? "is-invalid" : "custom-input"}`}
               type="number"
               id="latitude"
-              value={inputLatitude}
-              onChange={(event) => {
-                setInputLatitude(event.target.value);
-              }}
-              required
+              placeholder={errors.latitude ? "" : "Placeholder from db"}
+              {...register("latitude", { required: true })}
             />
           </div>
         </div>
@@ -153,15 +142,13 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
           <label htmlFor="utc">UTC</label>
 
           <div className="w-[250px] ">
+            {errors.utc && <p className="error">UTC is required (number)</p>}
             <input
-              className="custom-input"
+              className={` ${errors.utc ? "is-invalid" : "custom-input"}`}
               type="text"
               id="utc"
-              value={inputUTC}
-              onChange={(event) => {
-                setInputUTC(event.target.value);
-              }}
-              required
+              placeholder={errors.utc ? "" : "Placeholder from db"}
+              {...register("utc", { required: true })}
             />
           </div>
         </div>
@@ -172,9 +159,9 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
               id="internal"
               name="internal1"
               value="internal"
-              className="cursor-pointer"
               checked={checkboxesState[0]}
-              onChange={checkboxClickHandler}
+              className="cursor-pointer"
+              onClick={checkboxClickHandler}
             />
             <label className="  ml-2 cursor-pointer" htmlFor="internal">
               Internal
@@ -189,7 +176,7 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
               value="dst"
               className="cursor-pointer"
               checked={checkboxesState[1]}
-              onChange={checkboxClickHandler}
+              onClick={checkboxClickHandler}
             />
             <label className=" ml-2 cursor-pointer" htmlFor="dst">
               DST
@@ -202,32 +189,30 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
               id="disabled"
               name="disabled"
               value="disabled"
-              className="cursor-pointer"
               checked={checkboxesState[2]}
-              onChange={checkboxClickHandler}
+              className="cursor-pointer"
+              onClick={checkboxClickHandler}
             />
             <label className="  ml-2 cursor-pointer" htmlFor="disabled">
               Disabled
             </label>
           </div>
         </div>{" "}
-        <div className="control  flex justify-between">
+        <div className="control  flex justify-between ">
           <button
-            className="bg-gray-200 rounded-md p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl
+            className="bg-gray-200 rounded-md  w-[120px] p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl
             border border-gray-500 "
             type="Create Site"
-            onClick={() => {
-              router.push("/newSite");
-            }}
+            onClick={cancelBtnHandler}
           >
-            Create New Site
+            Cancel
           </button>
           <button
             className="bg-gray-200 rounded-md  p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl
-            border border-gray-500"
-            type="submit"
+            border border-gray-500 "
+            type="submit "
           >
-            Update
+            Create New Site
           </button>
         </div>
       </form>
