@@ -70,7 +70,7 @@ export default function Home() {
         >
           <div className="w-1/3">
             <div className="bg-gray-200 flex items-center">
-              <p className="w-full text-center py-2 font-bold ">Side Id</p>
+              <p className="w-full text-center py-2 font-bold ">Name</p>
               <p className="w-full text-center py-2">Owner</p>
             </div>
 
@@ -81,6 +81,7 @@ export default function Home() {
                     setFetchedInput={setFetchedInput}
                     key={site.siteId}
                     ownerName={site.owner}
+                    siteName={site.siteName}
                     siteId={site.siteId}
                   />
                 ))}

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Form({ fetchedInput, setRefetch, refetch }) {
-  const [inputID, setInputID] = useState("");
+  const [inputSiteName, setInputSiteName] = useState("");
   const [inputOwner, setInputOwner] = useState("");
   const [inputLongitude, setInputLongitude] = useState("");
   const [inputLatitude, setInputLatitude] = useState("");
@@ -15,7 +15,7 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
   const [checkboxesState, setCheckboxesState] = useState([false, true, false]);
 
   React.useEffect(() => {
-    setInputID(fetchedInput.siteId);
+    setInputSiteName(fetchedInput.siteName);
     setInputOwner(fetchedInput.owner);
     setInputLongitude(fetchedInput.longitude);
     setInputLatitude(fetchedInput.latitude);
@@ -56,6 +56,7 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
     event.preventDefault();
 
     const data = {
+      siteName: inputSiteName,
       owner: inputOwner,
       longitude: inputLongitude,
       latitude: inputLatitude,
@@ -64,8 +65,8 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
       dst: checkboxesState[1],
       disabled: checkboxesState[2],
     };
-
-    fetch(`http://localhost:8080/sites/${inputID}`, {
+    console.log("hiii" + fetchedInput.siteId);
+    fetch(`http://localhost:8080/sites/${fetchedInput.siteId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -87,16 +88,16 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
     <div className="flex-1">
       <form onSubmit={handleSubmit}>
         <div className="flex items-center  justify-between mb-8  space-x-8 ">
-          <label htmlFor="sideId"> SideID</label>
+          <label htmlFor="sideId">Name</label>
 
           <div className="w-[250px] ">
             <input
               className="custom-input"
-              type="number"
-              id="sideId"
-              value={inputID}
+              type="text"
+              id="siteName"
+              value={inputSiteName}
               onChange={(event) => {
-                setInputID(event.target.value);
+                setInputSiteName(event.target.value);
               }}
               required
             />

@@ -44,7 +44,7 @@ export default function NewSite() {
   } = useForm();
   const onSubmit = (data) => {
     const siteData = {
-      name: data.name,
+      siteName: data.name,
       owner: data.owner,
       longitude: data.longitude,
       latitude: data.latitude,
@@ -53,9 +53,6 @@ export default function NewSite() {
       dst: checkboxesState[1],
       disabled: checkboxesState[2],
     };
-
-    console.log(siteData);
-    return;
 
     fetch("http://localhost:8080/sites", {
       method: "POST",
@@ -79,7 +76,7 @@ export default function NewSite() {
     <div className="flex-1">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-center  justify-between mb-8  space-x-8 ">
-          <label htmlFor="sideId">Site name</label>
+          <label htmlFor="name">Name</label>
 
           <div className="w-[250px] ">
             {errors.name && <p className="error">Site name is required</p>}
@@ -87,7 +84,7 @@ export default function NewSite() {
               className={` ${errors.name ? "is-invalid" : "custom-input"}`}
               type="text"
               id="name"
-              placeholder={errors.name ? "" : "Placeholder from db"}
+              placeholder={errors.name ? "" : ""}
               {...register("name", { required: true })}
             />
           </div>
@@ -101,7 +98,7 @@ export default function NewSite() {
               className={` ${errors.owner ? "is-invalid" : "custom-input"}`}
               type="text"
               id="owner"
-              placeholder={errors.owner ? "" : "Placeholder from db"}
+              placeholder={errors.owner ? "" : ""}
               {...register("owner", { required: true })}
             />
           </div>
@@ -117,7 +114,7 @@ export default function NewSite() {
               className={` ${errors.longitude ? "is-invalid" : "custom-input"}`}
               type="number"
               id="longitude"
-              placeholder={errors.longitude ? "" : "Placeholder from db"}
+              placeholder={errors.longitude ? "" : ""}
               {...register("longitude", { required: true })}
             />
           </div>
@@ -133,7 +130,7 @@ export default function NewSite() {
               className={` ${errors.latitude ? "is-invalid" : "custom-input"}`}
               type="number"
               id="latitude"
-              placeholder={errors.latitude ? "" : "Placeholder from db"}
+              placeholder={errors.latitude ? "" : ""}
               {...register("latitude", { required: true })}
             />
           </div>
@@ -147,7 +144,7 @@ export default function NewSite() {
               className={` ${errors.utc ? "is-invalid" : "custom-input"}`}
               type="text"
               id="utc"
-              placeholder={errors.utc ? "" : "Placeholder from db"}
+              placeholder={errors.utc ? "" : ""}
               {...register("utc", { required: true })}
             />
           </div>
