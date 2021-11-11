@@ -66,10 +66,10 @@ export default function Home() {
         </header>
 
         <div
-          className="flex  space-x-8 
+          className="sm:flex space-x-8 
          p-5 bg-white"
         >
-          <div className="w-1/3">
+          <div className="mb-12 sm:w-1/3 sm:mb-0 ">
             <div className="bg-gray-200 flex items-center">
               <p className="w-full text-center py-2 font-bold ">Name</p>
               <p className="w-full text-center py-2">Owner</p>
