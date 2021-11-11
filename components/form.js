@@ -5,7 +5,13 @@ import router from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function Form({ fetchedInput, setRefetch, refetch }) {
+export default function Form({
+  fetchedInput,
+  setRefetch,
+  refetch,
+  setDeleteRefetch,
+  deleteRefetch,
+}) {
   const [inputSiteName, setInputSiteName] = useState("");
   const [inputOwner, setInputOwner] = useState("");
   const [inputLongitude, setInputLongitude] = useState("");
@@ -28,21 +34,24 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
   }, [fetchedInput]);
 
   const checkboxClickHandler = (event) => {
-    if (
-      event.target.attributes.id.value === "dst" &&
-      checkboxesState[1] === false
-    ) {
-      setCheckboxesState([false, true, false]);
-    } else if (
-      event.target.attributes.id.value === "internal" &&
-      checkboxesState[0] === false
-    ) {
-      setCheckboxesState([true, false, false]);
-    } else if (
-      event.target.attributes.id.value === "disabled" &&
-      checkboxesState[2] === false
-    ) {
-      setCheckboxesState([false, false, true]);
+    if (event.target.attributes.id.value === "dst") {
+      setCheckboxesState([
+        checkboxesState[0],
+        !checkboxesState[1],
+        checkboxesState[2],
+      ]);
+    } else if (event.target.attributes.id.value === "internal") {
+      setCheckboxesState([
+        !checkboxesState[0],
+        checkboxesState[1],
+        checkboxesState[2],
+      ]);
+    } else if (event.target.attributes.id.value === "disabled") {
+      setCheckboxesState([
+        checkboxesState[0],
+        checkboxesState[1],
+        !checkboxesState[2],
+      ]);
     }
   };
 
@@ -65,7 +74,7 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
       dst: checkboxesState[1],
       disabled: checkboxesState[2],
     };
-    console.log("hiii" + fetchedInput.siteId);
+
     fetch(`http://localhost:8080/sites/${fetchedInput.siteId}`, {
       method: "PUT",
       headers: {
@@ -222,6 +231,27 @@ export default function Form({ fetchedInput, setRefetch, refetch }) {
             }}
           >
             Create New Site
+          </button>
+          <button
+            className="bg-gray-200 rounded-md  p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl
+            border border-gray-500"
+            type="Delete Site"
+            onClick={() => {
+              fetch(`http://localhost:8080/sites/${fetchedInput.siteId}`, {
+                method: "DELETE",
+              })
+                .then((response) => {
+                  if (response.status !== 200) {
+                    throw new Error("Delete Site failed!");
+                  }
+                  setDeleteRefetch(!deleteRefetch);
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }}
+          >
+            Delete
           </button>
           <button
             className="bg-gray-200 rounded-md  p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl

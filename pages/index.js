@@ -8,6 +8,7 @@ import Site from "../components/site";
 
 export default function Home() {
   const [refetch, setRefetch] = React.useState(true);
+  const [deleteRefetch, setDeleteRefetch] = React.useState(true);
   const [sites, setSites] = React.useState([]);
   const [fetchedInput, setFetchedInput] = React.useState("");
 
@@ -30,7 +31,7 @@ export default function Home() {
         setSites(data);
       })
       .catch((err) => console.log(err));
-  }, [refetch]);
+  }, [refetch, deleteRefetch]);
 
   React.useEffect(() => {
     fetch("http://localhost:8080/sites", {
@@ -55,7 +56,7 @@ export default function Home() {
         setFetchedInput(firstSiteDetails);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [deleteRefetch]);
 
   return (
     <div className=" bg-[#fff] h-screen">
@@ -92,6 +93,8 @@ export default function Home() {
             fetchedInput={fetchedInput}
             setRefetch={setRefetch}
             refetch={refetch}
+            setDeleteRefetch={setDeleteRefetch}
+            deleteRefetch={deleteRefetch}
           />
         </div>
       </div>
