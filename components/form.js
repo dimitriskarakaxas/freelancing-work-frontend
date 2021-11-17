@@ -11,6 +11,7 @@ export default function Form({
   refetch,
   setDeleteRefetch,
   deleteRefetch,
+  portfolioId,
 }) {
   const [inputSiteName, setInputSiteName] = useState("");
   const [inputOwner, setInputOwner] = useState("");
@@ -227,10 +228,13 @@ export default function Form({
             border border-gray-500 "
             type="Create Site"
             onClick={() => {
-              router.push("/newSite");
+              router.push({
+                pathname: "/newSite",
+                query: { portfolio_id: portfolioId },
+              });
             }}
           >
-            Create New Site
+            Create Site
           </button>
           <button
             className="bg-gray-200 rounded-md  p-2 cursor-pointer hover:bg-gray-150 transition duration-150  hover:shadow-xl

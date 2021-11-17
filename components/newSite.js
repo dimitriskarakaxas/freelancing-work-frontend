@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-export default function NewSite() {
+export default function NewSite(props) {
   const [checkboxesState, setCheckboxesState] = React.useState([
     false,
     true,
@@ -37,7 +37,7 @@ export default function NewSite() {
 
   const cancelBtnHandler = (event) => {
     event.preventDefault();
-    router.push("/");
+    router.push("/site");
   };
 
   const {
@@ -55,6 +55,7 @@ export default function NewSite() {
       internal: checkboxesState[0],
       dst: checkboxesState[1],
       disabled: checkboxesState[2],
+      portfolio_id: props.portfolioId,
     };
 
     fetch("http://localhost:8080/sites", {
@@ -68,7 +69,7 @@ export default function NewSite() {
         if (response.status !== 201) {
           throw new Error("Create Site failed");
         }
-        router.push("/");
+        router.push(`/site?portfolio_id=${props.portfolioId}`);
       })
       .catch((error) => {
         console.error("Error:", error);

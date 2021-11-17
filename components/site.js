@@ -1,3 +1,5 @@
+/** @format */
+
 const Site = ({ ownerName, siteName, siteId, setFetchedInput }) => {
   const clickHandler = () => {
     fetch(`http://localhost:8080/sites/${siteId}`, {
